@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        ul li.active{
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="rowName">
+    <ul>
+        <li class="active">全部aaa</li>
+        <li>aaa1</li>
+        <li>aaa2</li>
+        <li>aaa3</li>
+        <li>aaa4</li>
+        <li>aaa5</li>
+    </ul>
+</div>
+
+</body>
+<script src="js/jquery-3.2.1.js"></script>
+<script>
+    filter("rowName");
+
+    function filter(rowName) {
+        var liArr = $("."+rowName+" ul li");
+        var choose = false;
+        var total = liArr.length - 1;
+        var num = 0;
+
+        // console.log(liArr);
+        // //选中【不限】时，其他不用高亮
+        $(liArr[0]).click(function () {
+            $(this).addClass("active");
+            for(var i = 1; i < liArr.length;i++){
+                $(liArr[i]).removeClass("active");
+            }
+        });
+
+        // 点击除【不限】之外的选项时高亮，全高亮时改为全部不高亮，【不限】选项高亮
+        //为 不限 后面的 选项进行单独绑定点击事件
+        for(var i = 1; i < liArr.length;i++) {
+            console.log(liArr[i]);
+            $(liArr[i]).click(function () {
+                //每次点击重置 choose 的值，且
+                choose = true;
+                num = 0;
+
+                //点击后，高亮显示
+                if($(this).hasClass("active")){
+                    $(this).removeClass("active");
+                }else{
+                    $(this).addClass("active");
+                }
+
+                //每次点击，都遍历一次确定是否都选中了
+                for (var j = 1; j < liArr.length; j++) {
+                    if($(liArr[j]).attr("class") === undefined) {
+                        choose = false;
+                        num++;
+                        if(num === total ){
+                            choose = true;
+                        }
+                    }
+                }
+
+                //对  choose 进行判断
+                if(choose){
+                    $("."+rowName+" ul li").removeClass("active");
+                    $(liArr[0]).addClass("active");
+                }else{
+                    $(liArr[0]).removeClass("active");
+                }
+            });
+        }
+    }
+    function callback() {
+        alert(1);
+    }
+</script>
+</html>
